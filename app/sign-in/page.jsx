@@ -1,4 +1,5 @@
 "use client";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { auth, googleAuthProvider } from "@/config/firebase";
@@ -42,12 +43,16 @@ export default function SignIn() {
     }, []);
 
     return (
-        <main className="flex-col w-screen ">
-            <p className="font-bold text-2xl">Signing in...</p>
-            <p>If login window is did not open, click here</p>
-            <button className="border-gray-700 bg-sky-500 rounded-md px-5 py-3 cursor-pointer">
-                Sign In/ Register
-            </button>
-        </main>
+        <Suspense fallback={<div>Loading...</div>}>
+            {/* Your sign-in component JSX */}
+            <div>
+                {" "}
+                <p className="font-bold text-2xl">Signing in...</p>
+                <p>If login window is did not open, click here</p>
+                <button className="border-gray-700 bg-sky-500 rounded-md px-5 py-3 cursor-pointer">
+                    Sign In/ Register
+                </button>
+            </div>
+        </Suspense>
     );
 }
