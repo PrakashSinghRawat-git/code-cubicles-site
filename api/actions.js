@@ -30,9 +30,23 @@ export const addUser = async (userObj) => {
         throw error;
     }
 };
+// get user info
+export const getUser = async (email) => {
+    try {
+        const userRef = doc(db, "users", email);
+        const userSnapshot = await getDoc(userRef);
 
+        if (userSnapshot.exists()) {
+            return { id: userSnapshot.id, ...userSnapshot.data() };
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching user: ", error);
+        throw error;
+    }
+};
 // save the user general info and role base info in corresponding collections
-
 export const saveUserData = async (generalInfo, roleBasedInfo) => {
     if (!generalInfo?.role) {
         return;
@@ -46,6 +60,18 @@ export const saveUserData = async (generalInfo, roleBasedInfo) => {
         console.log("user info saved successfully");
     } catch (error) {
         console.error("Error saving user info: ", error);
+        throw error;
+    }
+};
+
+// updating the role of the user
+export const updateRole = async (email, role) => {
+    try {
+        const userRef = doc(db, "users", email);
+        await updateDoc(userRef, { role });
+        console.log("role updated successfully");
+    } catch (error) {
+        console.error("Error updating role: ", error);
         throw error;
     }
 };

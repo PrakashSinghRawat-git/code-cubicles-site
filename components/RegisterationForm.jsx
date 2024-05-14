@@ -1,22 +1,25 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { saveUserData } from "@/api/actions";
+import { saveUserData, updateRole } from "@/api/actions";
+import { globalStore } from "@/store/globalStore";
 
 const doctorData = {
     degrees: ["mbbs", "md", "ms", "dm", "mch"],
     specialties: ["kidney", "heart", "lungs", "liver", "brain", "general"],
 };
-const roleBasedInfo = {
-    doctor: {
-        degree: "",
-        specialties: "",
-        hospitalWorkingIn: "",
-    },
-    patient: {
-        disease: "",
-    },
-};
+// const roleBasedInfo = {
+//     doctor: {
+//         degree: "",
+//         specialties: "",
+//         hospitalWorkingIn: "",
+//     },
+//     patient: {
+//         disease: "",
+//     },
+// };
 const RegisterationForm = () => {
+    const { userInfo, setUserInfo } = globalStore();
+
     const [generalInfo, setGeneralInfo] = useState({
         name: "",
         email: "",
@@ -48,7 +51,15 @@ const RegisterationForm = () => {
         console.log("generalInfo: ", generalInfo);
         console.log("roleBasedInfo: ", roleBasedInfo);
         await saveUserData(generalInfo, roleBasedInfo);
+
+        // update user role
+        await updateRole(userInfo?.email, generalInfo.role);
+        setUserInfo({
+            ...userInfo,
+            role: generalInfo.role,
+        });
         console.log("Data saved successfully");
+        window.location.href = "/";
     };
     return (
         <section>
@@ -81,7 +92,8 @@ const RegisterationForm = () => {
                         name="floating_email"
                         id="floating_email"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none       focus:border-blue-500 focus:outline-none focus:ring-0   peer"
-                        placeholder=" "
+                        placeholder=""
+                        defaultValue={userInfo?.email || ""}
                         required=""
                         onChange={(e) => {
                             setGeneralInfo({

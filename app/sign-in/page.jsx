@@ -26,12 +26,16 @@ export default function SignIn() {
                     photoURL: result.user.photoURL,
                     role: null,
                 };
+
                 // save user data to db
                 await addUser(userData);
 
                 localStorage.setItem("userInfo", JSON.stringify(userData));
                 setUserInfo(userData);
-                router.push(searchParams.get("redirect"));
+
+                console.log("redirect: ", searchParams.get("redirect"));
+                // router.push(searchParams.get("redirect"));
+                window.location.href = searchParams.get("redirect");
             }
         } catch (error) {
             console.error(
