@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { auth, googleAuthProvider } from "@/config/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { globalStore } from "@/store/globalStore";
+import { addUser } from "@/api/actions";
 
 export default function SignIn() {
     const router = useRouter();
@@ -23,7 +24,10 @@ export default function SignIn() {
                     name: result.user.displayName,
                     email: result.user.email,
                     photoURL: result.user.photoURL,
+                    role: null,
                 };
+                // save user data to db
+                await addUser(userData);
 
                 localStorage.setItem("userInfo", JSON.stringify(userData));
                 setUserInfo(userData);
